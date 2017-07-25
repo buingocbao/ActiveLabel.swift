@@ -253,8 +253,8 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
     // MARK: - helper functions
     
     fileprivate func setupLabel() {
-        textStorage.addLayoutManager(layoutManager)
         layoutManager.addTextContainer(textContainer)
+        textStorage.addLayoutManager(layoutManager)
         textContainer.lineFragmentPadding = 0
         textContainer.lineBreakMode = lineBreakMode
         textContainer.maximumNumberOfLines = numberOfLines
@@ -507,6 +507,12 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
             return
         }
         elementHandler(element)
+    }
+
+    override open func sizeToFit() {
+        self.textContainer.size = CGSize(width: self.bounds.width, height: CGFloat.greatestFiniteMagnitude)
+        self.layoutManager.glyphRange(for: self.textContainer)
+        self.frame.size = self.layoutManager.usedRect(for: self.textContainer).size
     }
 }
 
